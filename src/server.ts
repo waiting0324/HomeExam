@@ -1,11 +1,8 @@
-import express from 'express';
+import App from './app.js';
+import AuthRoute from './routes/auth.route.js';
 
-const app = express()
+// 初始化 與 註冊 路由 到 服務 中
+const app = new App([new AuthRoute()]);
 
-app.get('/test', (req: express.Request, res: express.Response) => {
-    res.status(200).send('請求成功111');
-})
-
-app.listen(8080, () => {
-    console.log("server start....");
-})
+// 啟動服務
+app.listen();
