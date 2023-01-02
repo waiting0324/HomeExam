@@ -2,6 +2,7 @@ import express from 'express'
 import { Routes } from './interfaces/routes.interfaces'
 import { PORT } from './configs/config';
 import { logger } from './utils/logger';
+import errorMiddleware from './middlewares/error.middleware';
 
 class App {
 
@@ -14,7 +15,7 @@ class App {
 
         this.initMiddlewares();
         this.initRoutes(routes);
-        
+        this.initializeErrorHandling();
     }
 
     /**
@@ -41,6 +42,13 @@ class App {
      */
     private initMiddlewares() {
         this.app.use(express.json());
+    }
+
+    /**
+     * 註冊 錯誤處理中間件
+     */
+    private initializeErrorHandling() {
+        this.app.use(errorMiddleware);
     }
 }
 
