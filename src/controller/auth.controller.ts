@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import DB from '../databases/database.js'
-import { CreateUserDto } from '../dtos/user.dto.js';
-import { logger } from '../utils/logger.js';
+import DB from '../databases/database'
+import { CreateUserDto } from '../dtos/user.dto';
+import { logger } from '../utils/logger';
 
 class AuthController {
 

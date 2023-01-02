@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
-import { DB_HOST, DB_PORT, DB_DATABASE, DB_USER, DB_PASSWORD } from '../configs/config.js';
-import UserModel from '../models/user.model.js';
+import { DB_HOST, DB_PORT, DB_DATABASE, DB_USER, DB_PASSWORD } from '../configs/config';
+import UserModel from '../models/user.model';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
     dialect: 'mysql',

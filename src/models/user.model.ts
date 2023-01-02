@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { User } from '../interfaces/users.interfaces.js';
+import { User } from '../interfaces/users.interfaces';
 
 // 創建一個新的 User 類型，將原來的屬性變成可選的
 type UserCreationAttributes = Optional<User, 'id' | 'email' | 'password'>;

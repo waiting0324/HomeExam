@@ -1,7 +1,7 @@
 import express from 'express'
 import { Routes } from './interfaces/routes.interfaces'
-import { PORT } from './configs/config.js';
-import { logger } from './utils/logger.js';
+import { PORT } from './configs/config';
+import { logger } from './utils/logger';
 
 class App {
 
