@@ -1,6 +1,6 @@
 import express from 'express'
 import { Routes } from './interfaces/routes.interfaces'
-import { PORT } from './config/config.js';
+import { PORT } from './configs/config.js';
 import { logger } from './utils/logger.js';
 
 class App {
@@ -11,7 +11,10 @@ class App {
     constructor(routes: Routes[]) {
         this.app = express();
         this.port = PORT;
+
+        this.initMiddlewares();
         this.initRoutes(routes);
+        
     }
 
     /**
@@ -31,6 +34,13 @@ class App {
         routes.forEach(route => {
             this.app.use('/', route.router)
         });
+    }
+
+    /**
+     * 初始化 中間件
+     */
+    private initMiddlewares() {
+        this.app.use(express.json());
     }
 }
 
