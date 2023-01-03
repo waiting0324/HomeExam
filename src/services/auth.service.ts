@@ -34,7 +34,8 @@ class AuthService {
             return;
         }
 
-        // 當 Email 不存在，表示是新註冊用戶
+        // 當 Email 不存在，表示是通過 Google 或 Facebook 授權的用戶
+        // 註: 通過 帳號、密碼 創建的帳號，會由 Auth0 那邊執行腳本寫入到 MySQL 中
         const createUser: CreateUserDto = new CreateUserDto();
         createUser.email = email;
         createUser.loggedInTimes = 1;
