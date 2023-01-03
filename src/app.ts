@@ -1,8 +1,11 @@
-import express from 'express'
-import { Routes } from './interfaces/routes.interfaces'
-import { PORT } from './configs/config';
+import express from 'express';
+import { Routes } from './interfaces/routes.interfaces';
+import { AUTH0_BASEURL, PORT, AUTH0_LOGIN_CALLBACK_ROUTE } from './configs/config';
 import { logger } from './utils/logger';
 import errorMiddleware from './middlewares/error.middleware';
+import dotenv from 'dotenv';
+import { auth } from 'express-openid-connect'
+import auth0Middleware from './middlewares/auth0.middleware';
 
 class App {
 
@@ -10,12 +13,16 @@ class App {
     public port: number;
 
     constructor(routes: Routes[]) {
+
+        dotenv.config({ path: `.env` });
+
         this.app = express();
         this.port = PORT;
 
+        this.initAuth0();
         this.initMiddlewares();
         this.initRoutes(routes);
-        this.initializeErrorHandling();
+        this.initErrorMiddleware();
     }
 
     /**
@@ -47,8 +54,23 @@ class App {
     /**
      * 註冊 錯誤處理中間件
      */
-    private initializeErrorHandling() {
+    private initErrorMiddleware() {
         this.app.use(errorMiddleware);
+    }
+
+    /**
+     * 初始化 Auth0 組件
+     */
+    private initAuth0() {
+        const config = {
+            authRequired: false,
+            auth0Logout: true,
+            baseURL: `${AUTH0_BASEURL}:${PORT}`,
+            routes: {
+                callback: AUTH0_LOGIN_CALLBACK_ROUTE,
+            }
+        };
+        this.app.use(auth(config));
     }
 }
 
