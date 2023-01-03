@@ -19,6 +19,7 @@ class AuthRoute implements Routes {
     private initRoutes() {
         this.router.post(`${this.path}/signup`, this.authController.signup);
         this.router.get(`${this.path}${AUTH0_LOGIN_RECORD_ROUTE}`, this.authController.loginRecord);
+        this.router.get(`${this.path}/user/profile`, this.authController.getUserProfile);
     }
 }
 

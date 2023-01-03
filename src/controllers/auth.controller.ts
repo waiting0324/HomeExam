@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import DB from '../databases/database'
-import { CreateUserDto } from '../dtos/user.dto';
+import { CreateUserDto, UserProfileDto } from '../dtos/user.dto';
 import { logger } from '../utils/logger';
 import AuthService from '../services/auth.service';
 import { HttpException } from '../exceptions/HttpException';
@@ -25,14 +25,29 @@ class AuthController {
         }
     }
 
+    /**
+     * 給 Auth0 回調用的，用來紀錄用戶登入數據
+     */
     public loginRecord = async (req: Request, res: Response, next: NextFunction) => {
-        
+
         // 如果當前登入的用戶不為空，則進行紀錄
-        if(req.oidc.user != undefined) {
+        if (req.oidc.user != undefined) {
             this.authService.loginRecord(req.oidc.user.email)
         }
-        
-        res.status(200).json('請求成功');
+
+        // 讓瀏覽器 302 跳轉到首頁
+        res.redirect(302, '/');
+    }
+
+    /**
+     * 獲取當前登入用戶的數據
+     */
+    public getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+
+        const userInfoDto: UserProfileDto = new UserProfileDto();
+        userInfoDto.isAuthenticated = req.oidc.isAuthenticated();
+
+        res.status(200).json({ data: userInfoDto });
     }
 
 }

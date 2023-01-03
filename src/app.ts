@@ -49,6 +49,7 @@ class App {
      */
     private initMiddlewares() {
         this.app.use(express.json());
+        this.app.use(express.static(__dirname + '/public'))
     }
 
     /**

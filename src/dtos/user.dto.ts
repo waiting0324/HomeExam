@@ -4,3 +4,7 @@ export class CreateUserDto {
     public signUpTime: Date;
     public loggedInTimes: number;
 }
+
+export class UserProfileDto {
+    public isAuthenticated: boolean;
+}
