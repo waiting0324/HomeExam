@@ -1,11 +1,11 @@
 import express from 'express';
 import { Routes } from './interfaces/routes.interfaces';
-import { AUTH0_BASEURL, PORT, AUTH0_LOGIN_CALLBACK_ROUTE } from './configs/config';
+import { AUTH0_BASEURL, PORT, AUTH0_LOGIN_CALLBACK_ROUTE, AUTH0_LOGIN_RECORD_ROUTE } from './configs/config';
 import { logger } from './utils/logger';
 import errorMiddleware from './middlewares/error.middleware';
 import dotenv from 'dotenv';
 import { auth } from 'express-openid-connect'
-import auth0Middleware from './middlewares/auth0.middleware';
+import AuthService from './services/auth.service';
 
 class App {
 
@@ -67,7 +67,12 @@ class App {
             auth0Logout: true,
             baseURL: `${AUTH0_BASEURL}:${PORT}`,
             routes: {
-                callback: AUTH0_LOGIN_CALLBACK_ROUTE,
+                callback: AUTH0_LOGIN_CALLBACK_ROUTE, // Auth0 處理 302 跳轉的 API 路徑
+            },
+            getLoginState(req, options) {
+                return {
+                    returnTo: AUTH0_LOGIN_RECORD_ROUTE, // 登入完成後，用於紀錄用戶數據的 API
+                };
             }
         };
         this.app.use(auth(config));

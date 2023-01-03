@@ -3,6 +3,7 @@ import { CreateUserDto } from '../dtos/user.dto';
 import { User } from '../interfaces/users.interfaces'
 import { HttpException } from '../exceptions/HttpException'
 import bycrypt from 'bcrypt';
+import { logger } from '../utils/logger';
 
 class AuthService {
 
@@ -21,6 +22,10 @@ class AuthService {
         const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
 
         return createUserData;
+    }
+
+    public async loginCallback(email: string): Promise<void> {
+        logger.info(email);
     }
 }
 
