@@ -1,5 +1,6 @@
 
 export class CreateUserDto {
     public email: string;
-    public password: string;
+    public signUpTime: Date;
+    public loggedInTimes: number;
 }

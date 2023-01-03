@@ -4,6 +4,7 @@ import { User } from '../interfaces/users.interfaces'
 import { HttpException } from '../exceptions/HttpException'
 import bycrypt from 'bcrypt';
 import { logger } from '../utils/logger';
+import userModel from '../models/user.model';
 
 class AuthService {
 
@@ -18,14 +19,27 @@ class AuthService {
         }
 
         // 將密碼加密，並替換要存儲的 password，再存到 MySQL 中
-        const hashedPassword = bycrypt.hashSync(userData.password, 10);
-        const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
+        // const hashedPassword = bycrypt.hashSync(userData.password, 10);
+        const createUserData: User = await this.users.create({ ...userData });
 
         return createUserData;
     }
 
-    public async loginCallback(email: string): Promise<void> {
-        logger.info(email);
+    public async loginRecord(email: string): Promise<void> {
+
+        // 當 Email 已存在，則表示該用戶之前已經註冊過，則只更新登入次數
+        const findUser: User | null = await this.users.findOne({ where: { email: email } });
+        if (findUser) {
+            await this.users.update({ ...findUser, loggedInTimes: findUser.loggedInTimes + 1 }, { where: { id: findUser.id } })
+            return;
+        }
+
+        // 當 Email 不存在，表示是新註冊用戶
+        const createUser: CreateUserDto = new CreateUserDto();
+        createUser.email = email;
+        createUser.loggedInTimes = 1;
+        createUser.signUpTime = new Date();
+        await this.users.create({ ...createUser });
     }
 }
 

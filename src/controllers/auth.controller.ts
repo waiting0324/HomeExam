@@ -26,7 +26,13 @@ class AuthController {
     }
 
     public loginRecord = async (req: Request, res: Response, next: NextFunction) => {
-        logger.info('21111111')
+        
+        // 如果當前登入的用戶不為空，則進行紀錄
+        if(req.oidc.user != undefined) {
+            this.authService.loginRecord(req.oidc.user.email)
+        }
+        
+        res.status(200).json('請求成功');
     }
 
 }
