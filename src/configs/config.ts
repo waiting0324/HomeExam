@@ -11,8 +11,22 @@ const DB_DATABASE: string = 'aha';
 
 // --- Auth0相關的配置 ---
 const AUTH0_BASEURL: string = 'http://localhost';
-const AUTH0_LOGIN_CALLBACK_ROUTE = '/login/callback';
-const AUTH0_LOGIN_RECORD_ROUTE = '/login/record';
+const AUTH0_LOGIN_CALLBACK_ROUTE: string = '/login/callback';
+const AUTH0_LOGIN_RECORD_ROUTE: string = '/login/record';
 
-export { PORT, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE, AUTH0_BASEURL, AUTH0_LOGIN_CALLBACK_ROUTE,
-    AUTH0_LOGIN_RECORD_ROUTE }
+// --- SMTP相關的配置 ---
+const SMTP_HOST: string = 'smtp.gmail.com';
+const SMTP_PORT: number = 465;
+const SMTP_USER: string = 'weicardstw@gmail.com';
+const SMTP_PASSWORD: string = 'yvitkmfttficwizs';
+
+// --- 驗證郵件相關配置 ---
+const MAIL_FROM: string = 'weicardstw@gmail.com';
+const MAIL_SUBTITLE: string = 'Aha Exam Verified Mail';
+const MAIL_TEMPLATE: string = `請點擊此連結進行信箱驗證 : <a href="${AUTH0_BASEURL}:${PORT}/user/verified/{CODE}">${AUTH0_BASEURL}:${PORT}/user/verified/{CODE}</a>`;
+
+
+export {
+    PORT, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE, AUTH0_BASEURL, AUTH0_LOGIN_CALLBACK_ROUTE,
+    AUTH0_LOGIN_RECORD_ROUTE, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, MAIL_FROM, MAIL_SUBTITLE, MAIL_TEMPLATE
+}

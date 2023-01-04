@@ -10,6 +10,8 @@ class UserModel extends Model implements User {
     public id: number;
     public email: string;
     public name: string;
+    public verifiedCode: string;
+    public isVerified: boolean;
     public signUpTime: Date;
     public loggedInTimes: number;
 
@@ -33,6 +35,14 @@ export default function (sequelize: Sequelize): typeof UserModel {
             name: {
                 allowNull: false,
                 type: DataTypes.STRING(45),
+            },
+            verifiedCode: {
+                allowNull: true,
+                type: DataTypes.STRING(45),
+            },
+            isVerified: {
+                allowNull: false,
+                type: DataTypes.BOOLEAN,
             },
             signUpTime: {
                 allowNull: false,

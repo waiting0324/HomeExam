@@ -2,10 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions/HttpException';
 import UserService from '../services/user.service';
 import { UserProfileDto } from '../dtos/user.dto';
+import AuthService from '../services/auth.service';
 
 class UserController {
 
-    private userService: UserService = new UserService()
+    private userService: UserService = new UserService();
+    private authService: AuthService = new AuthService();
 
     /**
      * 獲取當前登入用戶的數據
@@ -37,7 +39,7 @@ class UserController {
             if (req.oidc.user == undefined) {
                 throw new HttpException(403, '帳號未登入');
             }
-            
+
             // 從 Token 與 請求參數 獲取數據
             const email = req.oidc.user.email;
             const name = req.body.name;
