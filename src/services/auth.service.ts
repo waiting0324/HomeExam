@@ -43,20 +43,7 @@ class AuthService {
         createUser.signUpTime = new Date();
         await this.users.create({ ...createUser });
     }
-
-    /**
-     * 根據用戶 email 查找 用戶對象
-     * @param email 用戶 email
-     */
-    public async getUser(email: string): Promise<User> {
-
-        const findUser: User | null = await this.users.findOne({ where: { email: email } });
-        if (findUser == null) {
-            throw new HttpException(404, `該 Email 不存在: ${email} `);
-        }
-
-        return findUser;
-    }
+    
 }
 
 export default AuthService;

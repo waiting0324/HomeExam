@@ -68,7 +68,7 @@
                     style="display: none">登出</el-button>
             </el-col>
             <el-col :span="3" :offset="2">
-                <el-button type="primary my-button">重設密碼</el-button>
+                <el-button type="primary my-button" @click="updateUsername">修改用戶名稱</el-button>
             </el-col>
         </el-row>
     </div>
@@ -79,16 +79,42 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script>
-    new Vue({
-        el: '#app',
-        data: function () {
-            return { visible: false }
+
+    var Main = {
+        methods: {
+            
+            // 更新用戶名稱
+            updateUsername() {
+                this.$prompt('請輸入用戶名稱', {
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+
+                    // 發送更新用戶名稱的請求
+                    $.ajax({
+                        type: "POST",
+                        url: "/user/name",
+                        data: JSON.stringify({
+                            name: value,
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }).catch(() => { });
+            }
         }
-    })
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+
     window.onload = async () => {
 
         // 獲取當前帳號是否為登入狀態
         $.ajax({
+
             url: '/user/profile',
             method: 'GET',
             success: function (result) {
