@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import DB from '../databases/database'
 import { CreateUserDto, UserProfileDto } from '../dtos/user.dto';
 import { logger } from '../utils/logger';
 import AuthService from '../services/auth.service';
@@ -32,7 +31,7 @@ class AuthController {
 
         // 如果當前登入的用戶不為空，則進行紀錄
         if (req.oidc.user != undefined) {
-            this.authService.loginRecord(req.oidc.user.email)
+            this.authService.loginRecord(req.oidc.user.email, req.oidc.user.name);
         }
 
         // 讓瀏覽器 302 跳轉到首頁

@@ -29,6 +29,10 @@ export default function (sequelize: Sequelize): typeof UserModel {
                 allowNull: false,
                 type: DataTypes.STRING(45),
             },
+            name: {
+                allowNull: false,
+                type: DataTypes.STRING(45),
+            }, 
             signUpTime: {
                 allowNull: false,
                 type: DataTypes.DATE(),

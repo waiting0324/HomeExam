@@ -25,7 +25,7 @@ class AuthService {
         return createUserData;
     }
 
-    public async loginRecord(email: string): Promise<void> {
+    public async loginRecord(email: string, name: string): Promise<void> {
 
         // 當 Email 已存在，則表示該用戶之前已經註冊過，則只更新登入次數
         const findUser: User | null = await this.users.findOne({ where: { email: email } });
@@ -38,6 +38,7 @@ class AuthService {
         // 註: 通過 帳號、密碼 創建的帳號，會由 Auth0 那邊執行腳本寫入到 MySQL 中
         const createUser: CreateUserDto = new CreateUserDto();
         createUser.email = email;
+        createUser.name = name;
         createUser.loggedInTimes = 1;
         createUser.signUpTime = new Date();
         await this.users.create({ ...createUser });
