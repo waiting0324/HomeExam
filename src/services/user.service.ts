@@ -30,6 +30,28 @@ class UserService {
         this.users.update({ ...findUser, name: name }, { where: { id: findUser.id } });
     }
 
+    /**
+     * 驗證 信箱 對應的 驗證碼
+     * @param email 信箱
+     * @param code 驗證碼
+     */
+    public async verifiedEmail(email: string, code: string): Promise<void> {
+
+        // 根據 Email 查找對應帳號
+        const findUser: User = await this.getUser(email);
+
+        // 驗證碼不匹配，則報錯
+        if (findUser.verifiedCode !== code) {
+            throw new HttpException(403, `${code} 與該 Email 對應帳號的驗證碼不匹配: ${email}`);
+        }
+
+        // 驗證碼匹配，則更新帳號的認證狀態
+        await DB.sequelize.query('UPDATE users SET is_verified = true WHERE id = :id', {
+            replacements: { id: findUser.id },
+            type: DB.Sequelize.QueryTypes.UPDATE,
+        });
+    }
+
 }
 
 export default UserService;

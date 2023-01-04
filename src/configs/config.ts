@@ -23,7 +23,7 @@ const SMTP_PASSWORD: string = 'yvitkmfttficwizs';
 // --- 驗證郵件相關配置 ---
 const MAIL_FROM: string = 'weicardstw@gmail.com';
 const MAIL_SUBTITLE: string = 'Aha Exam Verified Mail';
-const MAIL_TEMPLATE: string = `請點擊此連結進行信箱驗證 : <a href="${AUTH0_BASEURL}:${PORT}/user/verified/{CODE}">${AUTH0_BASEURL}:${PORT}/user/verified/{CODE}</a>`;
+const MAIL_TEMPLATE: string = `請點擊此連結進行信箱驗證 : <a href="${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verified/{CODE}">${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verified/{CODE}</a>`;
 
 
 export {

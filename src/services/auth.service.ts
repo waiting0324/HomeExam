@@ -68,7 +68,7 @@ class AuthService {
         // 信件相關數據
         const mailFrom: string = MAIL_FROM;
         const mailSubtitle: string = MAIL_SUBTITLE;
-        const mailContent: string = MAIL_TEMPLATE.replaceAll('{CODE}', findUser.verifiedCode);
+        const mailContent: string = MAIL_TEMPLATE.replaceAll('{CODE}', findUser.verifiedCode).replaceAll('{EMAIL}', encodeURIComponent(email));
 
         // 發送驗證信件
         MailUtil.sendMail({

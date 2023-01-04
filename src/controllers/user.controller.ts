@@ -52,6 +52,22 @@ class UserController {
         }
     }
 
+    /**
+     * 驗證用戶信箱
+     */
+    public verifiedEmail = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            // 對驗證碼進行校驗，校驗失敗則拋出異常
+            await this.userService.verifiedEmail(req.params.email, req.params.code);
+
+            // 讓瀏覽器 302 跳轉到首頁
+            res.redirect(302, '/');
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 export default UserController;
