@@ -46,6 +46,13 @@ class AuthController {
         const userInfoDto: UserProfileDto = new UserProfileDto();
         userInfoDto.isAuthenticated = req.oidc.isAuthenticated();
 
+        // 只有登入之後，才能獲取到以下數據
+        if (userInfoDto.isAuthenticated && req.oidc.user != undefined) {
+            userInfoDto.email = req.oidc.user.email;
+            userInfoDto.name = (await this.authService.getUser(userInfoDto.email)).name;
+            userInfoDto.pic = req.oidc.user.picture;
+        }
+
         res.status(200).json({ data: userInfoDto });
     }
 
