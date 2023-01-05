@@ -21,8 +21,10 @@ class UserController {
 
             // 只有登入之後，才能獲取到以下數據
             if (userInfoDto.isAuthenticated && req.oidc.user != undefined) {
+                const findUser = await this.userService.getUser(req.oidc.user.email);
+                userInfoDto.isVerified = findUser.isVerified;
                 userInfoDto.email = req.oidc.user.email;
-                userInfoDto.name = (await this.userService.getUser(userInfoDto.email)).name;
+                userInfoDto.name = findUser.name;
                 userInfoDto.pic = req.oidc.user.picture;
             }
 
@@ -63,8 +65,8 @@ class UserController {
             // 對驗證碼進行校驗，校驗失敗則拋出異常
             await this.userService.verifiedEmail(req.params.email, req.params.code);
 
-            // 讓瀏覽器 302 跳轉到首頁
-            res.redirect(302, '/');
+            // 讓瀏覽器 302 跳轉到 Dashboard 頁面
+            res.redirect(302, '/dashboard.html');
         } catch (error) {
             next(error);
         }
@@ -110,6 +112,18 @@ class UserController {
         userStatisticDto.weekUserCount = weekUserCount;
 
         res.status(200).json({ data: userStatisticDto });
+    }
+
+    /**
+     * 發送驗證信件
+     */
+    public sendVerifiedEmail = async (req: Request, res: Response, next: NextFunction) => {
+
+        if (req.oidc.user == undefined) {
+            throw new HttpException(403, '帳號未登入');
+        }
+
+        this.authService.sendVerifiedEmail(req.oidc.user.email);
     }
 }
 

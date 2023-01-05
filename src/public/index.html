@@ -19,7 +19,6 @@
         text-align: center;
         color: #333;
         margin-top: 80px;
-        margin-bottom: 80px;
         padding: 15px;
     }
 
@@ -46,6 +45,16 @@
         <el-row>
             <el-col :span="12" :offset="6">
                 <div class="grid-content bg-purple">Aha Home Exam</div>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="3" :offset="15">
+                <el-button id="dashboard-btn" type="primary my-button" @click="dashboard" style="display: none">
+                    查看用戶儀表盤
+                </el-button>
+                <el-button id="resent-email-btn" type="warning my-button" @click="resentEmail" style="display: none">
+                    驗證您的信箱
+                </el-button>
             </el-col>
         </el-row>
         <el-row id="user-profile">
@@ -82,7 +91,7 @@
 
     var Main = {
         methods: {
-            
+
             // 更新用戶名稱
             updateUsername() {
                 this.$prompt('請輸入用戶名稱', {
@@ -104,6 +113,20 @@
                         }
                     });
                 }).catch(() => { });
+            },
+            // 查看用戶儀表盤
+            dashboard() {
+                location.href = '/dashboard.html';
+            },
+            // 發送驗證信件
+            resentEmail() {
+                $.ajax({
+                    type: "POST",
+                    url: "/user/name",
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
             }
         }
     }
@@ -132,6 +155,13 @@
                     document.getElementById('user-pic').children[0].src = result.data.pic;
                     document.getElementById('user-name').innerHTML = result.data.name;
                     document.getElementById('user-email').innerHTML = result.data.email;
+
+                    // 如果信箱已經驗證過，則顯示用戶儀表盤按鈕，否則則顯示驗證信箱按鈕
+                    if(result.data.isVerified) {
+                        document.getElementById('dashboard-btn').style.display = 'block';
+                    } else {
+                        document.getElementById('resent-email-btn').style.display = 'block';
+                    }
                 }
                 // 否則則顯示登入按鈕，隱藏登出按鈕
                 else {

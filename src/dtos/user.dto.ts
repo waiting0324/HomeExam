@@ -15,6 +15,7 @@ export class CreateUserDto {
  */
 export class UserProfileDto {
     public isAuthenticated: boolean;
+    public isVerified: boolean;
     public email: string;
     public name: string;
     public pic: string;

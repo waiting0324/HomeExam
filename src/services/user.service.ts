@@ -1,10 +1,12 @@
 import DB from '../databases/database'
 import { HttpException } from '../exceptions/HttpException'
 import { User } from '../interfaces/users.interfaces'
+import AuthService from './auth.service';
 
 class UserService {
 
     private users = DB.Users;
+    private authService: AuthService = new AuthService();
 
     /**
      * 根據用戶 email 查找 用戶對象
