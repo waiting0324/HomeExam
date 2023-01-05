@@ -22,6 +22,15 @@
         margin-bottom: 80px;
         padding: 15px;
     }
+
+    .el-statistic .head .title {
+        font-size: 18px;
+        color: #6e7072;
+    }
+
+    .el-statistic .con .number {
+        font-size: 26px;
+    }
 </style>
 
 <body>
@@ -29,6 +38,20 @@
         <el-row>
             <el-col :span="12" :offset="6">
                 <div class="grid-content bg-purple">Aha Home Exam</div>
+            </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 50px;">
+            <el-col :offset="6" :span="4">
+                <el-statistic title="註冊人數" :value="allUserCount">
+                </el-statistic>
+            </el-col>
+            <el-col :span="4">
+                <el-statistic title="今天訪問人數" :value="todayUserCount">
+                </el-statistic>
+            </el-col>
+            <el-col :span="4">
+                <el-statistic title="本週訪問人數" :value="weekUserCount">
+                </el-statistic>
             </el-col>
         </el-row>
         <el-row>
@@ -47,8 +70,7 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="warning"
-                                    @click="changePassword(scope.row.email)">更改密碼
+                                <el-button size="mini" type="warning" @click="changePassword(scope.row.email)">更改密碼
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -69,9 +91,13 @@
         el: '#app',
         data: {
             tableData: [],
+            allUserCount: 0,
+            todayUserCount: 0,
+            weekUserCount: 0,
         },
         created: function () {
             this.getTableData();
+            this.getUserStatistic();
         },
         methods: {
             getTableData: function () {
@@ -83,13 +109,28 @@
                         self.tableData = json.data;
                     },
                     error: function (json) {
-                        alert("獲取所有用戶失敗");
+                        self.$message.error('獲取用戶列表數據失敗');
                     }
                 });
             },
             changePassword(email) {
                 console.log(email);
             },
+            getUserStatistic: function() {
+                var self = this;
+                $.ajax({
+                    type: "GET",
+                    url: "/user/all/statistic",
+                    success: function (json) {
+                        self.allUserCount = json.data.allUserCount;
+                        self.todayUserCount = json.data.todayUserCount;
+                        self.weekUserCount = json.data.weekUserCount;
+                    },
+                    error: function (json) {
+                        self.$message.error('獲取用戶統計數據失敗');
+                    }
+                });
+            }
         }
     })
 

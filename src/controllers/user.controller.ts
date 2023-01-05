@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions/HttpException';
 import UserService from '../services/user.service';
-import { UserListDto, UserProfileDto } from '../dtos/user.dto';
+import { UserListDto, UserProfileDto, UserStatisticDto } from '../dtos/user.dto';
 import AuthService from '../services/auth.service';
 import { User } from '../interfaces/users.interfaces'
 import DateUtil from '../utils/date';
@@ -93,6 +93,24 @@ class UserController {
         res.status(200).json({ data: userDtoList });
     }
 
+    /**
+     * 查詢用戶統計信息
+     */
+    public getAllUserStatistic = async (req: Request, res: Response, next: NextFunction) => {
+
+        // 查詢數據
+        const allUserCount: number = await this.userService.getAllUserCount();
+        const todayUserCount: number = await this.userService.getTodayUserCount();
+        const weekUserCount: number = await this.userService.getWeekUserCount();
+
+        // 封裝數據
+        const userStatisticDto: UserStatisticDto = new UserStatisticDto();
+        userStatisticDto.allUserCount = allUserCount;
+        userStatisticDto.todayUserCount = todayUserCount;
+        userStatisticDto.weekUserCount = weekUserCount;
+
+        res.status(200).json({ data: userStatisticDto });
+    }
 }
 
 export default UserController;

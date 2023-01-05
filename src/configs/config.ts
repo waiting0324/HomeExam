@@ -6,7 +6,7 @@ const PORT: number = 8080;
 const DB_HOST: string = '104.199.176.25';
 const DB_PORT: number = 3306;
 const DB_USER: string = 'root';
-const DB_PASSWORD: string = 'i)c~o+.T8n:SX^iH';
+const DB_PASSWORD: string = '*****';
 const DB_DATABASE: string = 'aha';
 
 // --- Auth0相關的配置 ---
@@ -18,7 +18,7 @@ const AUTH0_LOGIN_RECORD_ROUTE: string = '/login/record';
 const SMTP_HOST: string = 'smtp.gmail.com';
 const SMTP_PORT: number = 465;
 const SMTP_USER: string = 'weicardstw@gmail.com';
-const SMTP_PASSWORD: string = 'yvitkmfttficwizs';
+const SMTP_PASSWORD: string = '*****';
 
 // --- 驗證郵件相關配置 ---
 const MAIL_FROM: string = 'weicardstw@gmail.com';

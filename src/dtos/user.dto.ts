@@ -30,3 +30,12 @@ export class UserListDto {
     public loggedInTimes: number;
     public lastVisitedTime: string;
 }
+
+/**
+ * 用戶統計信息
+ */
+export class UserStatisticDto {
+    public allUserCount: number;
+    public todayUserCount: number;
+    public weekUserCount: number;
+}
