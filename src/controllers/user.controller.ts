@@ -86,6 +86,7 @@ class UserController {
             userDto.name = user.name;
             userDto.signUpTime = DateUtil.format(user.signUpTime);
             userDto.loggedInTimes = user.loggedInTimes;
+            userDto.lastVisitedTime = DateUtil.format(user.lastVisitedTime);
             userDtoList.push(userDto);
         }
 

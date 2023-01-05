@@ -13,6 +13,7 @@ class UserModel extends Model implements User {
     public verifiedCode: string;
     public isVerified: boolean;
     public signUpTime: Date;
+    public lastVisitedTime: Date;
     public loggedInTimes: number;
 
     // 將時間戳標記為只讀
@@ -45,6 +46,10 @@ export default function (sequelize: Sequelize): typeof UserModel {
                 type: DataTypes.BOOLEAN,
             },
             signUpTime: {
+                allowNull: false,
+                type: DataTypes.DATE(),
+            },
+            lastVisitedTime: {
                 allowNull: false,
                 type: DataTypes.DATE(),
             },

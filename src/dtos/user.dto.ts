@@ -5,7 +5,9 @@ export class CreateUserDto {
     public email: string;
     public name: string;
     public signUpTime: Date;
+    public lastVisitedTime: Date;
     public loggedInTimes: number;
+    public isVerified: boolean;
 }
 
 /**
@@ -26,5 +28,5 @@ export class UserListDto {
     public name: string;
     public signUpTime: string;
     public loggedInTimes: number;
-    public lastVisitedTime: Date;
+    public lastVisitedTime: string;
 }

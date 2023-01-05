@@ -3,6 +3,7 @@ import { Routes } from './interfaces/routes.interfaces';
 import { AUTH0_BASEURL, PORT, AUTH0_LOGIN_CALLBACK_ROUTE, AUTH0_LOGIN_RECORD_ROUTE } from './configs/config';
 import { logger } from './utils/logger';
 import errorMiddleware from './middlewares/error.middleware';
+import visitedTimeMiddleware from './middlewares/visit.middleware';
 import dotenv from 'dotenv';
 import { auth } from 'express-openid-connect'
 import AuthService from './services/auth.service';
@@ -40,7 +41,7 @@ class App {
      */
     private initRoutes(routes: Routes[]) {
         routes.forEach(route => {
-            this.app.use('/', route.router)
+            this.app.use('/', route.router);
         });
     }
 
@@ -49,7 +50,8 @@ class App {
      */
     private initMiddlewares() {
         this.app.use(express.json());
-        this.app.use(express.static(__dirname + '/public'))
+        this.app.use(express.static(__dirname + '/public'));
+        this.app.use(visitedTimeMiddleware);
     }
 
     /**

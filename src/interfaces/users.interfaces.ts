@@ -5,5 +5,6 @@ export interface User {
     verifiedCode: string;
     isVerified: boolean;
     signUpTime: Date;
+    lastVisitedTime: Date;
     loggedInTimes: number;
 }

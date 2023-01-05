@@ -54,6 +54,8 @@ class AuthService {
         createUser.name = name;
         createUser.loggedInTimes = 1;
         createUser.signUpTime = new Date();
+        createUser.lastVisitedTime = new Date();
+        createUser.isVerified = true;
         await this.users.create({ ...createUser });
     }
 
