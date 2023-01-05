@@ -5,6 +5,8 @@ import { UserListDto, UserProfileDto, UserStatisticDto } from '../dtos/user.dto'
 import AuthService from '../services/auth.service';
 import { User } from '../interfaces/users.interfaces'
 import DateUtil from '../utils/date';
+import bycrypt from 'bcrypt';
+import PasswordUtil from '../utils/password';
 
 class UserController {
 
@@ -124,6 +126,35 @@ class UserController {
         }
 
         this.authService.sendVerifiedEmail(req.oidc.user.email);
+    }
+
+    public updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // 獲取 請求數據
+            const email: string = req.body.email;
+            const oldPwd: string = req.body.oldPwd;
+            const newPwd: string = req.body.newPwd;
+            const checkNewPwd: string = req.body.checkNewPwd;
+
+            // 校驗密碼
+            if (!PasswordUtil.isValid(newPwd)) {
+                throw new HttpException(403, '密碼不符合要求(小寫字母、大寫字母、數字、特殊字符,4種滿足其中3種; 且長度至少 8 位)');
+            }
+            if (newPwd != checkNewPwd) {
+                throw new HttpException(403, '新密碼 與 確認密碼 不一致');
+            }
+            const findUserPwd = (await this.userService.getUser(email)).password;
+            if (!bycrypt.compareSync(oldPwd, findUserPwd)) {
+                throw new HttpException(403, '原密碼不正確');
+            }
+
+            // 更新密碼
+            await this.userService.updatePassword(email, newPwd);
+
+            res.status(200).json({ message: '密碼更新成功' });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

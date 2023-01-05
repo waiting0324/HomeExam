@@ -2,6 +2,7 @@ import DB from '../databases/database'
 import { HttpException } from '../exceptions/HttpException'
 import { User } from '../interfaces/users.interfaces'
 import AuthService from './auth.service';
+import bycrypt from 'bcrypt';
 
 class UserService {
 
@@ -76,7 +77,7 @@ class UserService {
     /**
      * 獲取 今天內有進行訪問 的 帳號數量
      */
-     public async getTodayUserCount(): Promise<number> {
+    public async getTodayUserCount(): Promise<number> {
         const result = await DB.sequelize.query('SELECT COUNT(1) as count FROM users WHERE last_visited_time >= CURDATE()', {
             type: DB.Sequelize.QueryTypes.SELECT,
         });
@@ -86,11 +87,25 @@ class UserService {
     /**
      * 獲取 7 天內有進行訪問 的 帳號數量
      */
-     public async getWeekUserCount(): Promise<number> {
+    public async getWeekUserCount(): Promise<number> {
         const result = await DB.sequelize.query('SELECT COUNT(*) as count FROM users WHERE last_visited_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)', {
             type: DB.Sequelize.QueryTypes.SELECT,
         });
         return result[0].count;
+    }
+
+    /**
+     * 根據 Email 更新密碼
+     * @param email 用戶的 Email
+     * @param passowrd 新密碼
+     */
+    public async updatePassword(email: string, password: string): Promise<void> {
+
+        // 更新密碼
+        await DB.sequelize.query('UPDATE users SET password = :password WHERE email = :email', {
+            replacements: { email: email, password: bycrypt.hashSync(password, 10) },
+            type: DB.Sequelize.QueryTypes.UPDATE,
+        });
     }
 
 }

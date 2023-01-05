@@ -9,6 +9,7 @@ class UserModel extends Model implements User {
 
     public id: number;
     public email: string;
+    public password: string;
     public name: string;
     public verifiedCode: string;
     public isVerified: boolean;
@@ -31,6 +32,10 @@ export default function (sequelize: Sequelize): typeof UserModel {
             },
             email: {
                 allowNull: false,
+                type: DataTypes.STRING(45),
+            },
+            password: {
+                allowNull: true,
                 type: DataTypes.STRING(45),
             },
             name: {

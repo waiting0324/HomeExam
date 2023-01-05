@@ -23,6 +23,7 @@ class UserRoute implements Routes {
         this.router.get(`${this.path}/all`, this.userController.getAllUser);
         this.router.get(`${this.path}/all/statistic`, this.userController.getAllUserStatistic);
         this.router.get(`${this.path}/:email/verified`, this.userController.sendVerifiedEmail);
+        this.router.post(`${this.path}/password`, this.userController.updatePassword);
     }
 }
 

@@ -31,6 +31,10 @@
     .el-statistic .con .number {
         font-size: 26px;
     }
+
+    .el-dialog__body {
+        padding-right: 80px;
+    }
 </style>
 
 <body>
@@ -40,6 +44,7 @@
                 <div class="grid-content bg-purple">Aha Home Exam</div>
             </el-col>
         </el-row>
+
         <el-row style="margin-bottom: 50px;">
             <el-col :offset="6" :span="4">
                 <el-statistic title="註冊人數" :value="allUserCount">
@@ -78,6 +83,31 @@
                 </template>
             </el-col>
         </el-row>
+
+        <template>
+            <div>
+                <el-dialog title="修改密碼" :visible.sync="showDialog" width="30%">
+                    <el-form ref="form" :model="form" label-width="120px">
+                        <el-form-item label="Email">
+                            <el-input v-model="form.email" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="原密碼">
+                            <el-input v-model="form.oldPwd"></el-input>
+                        </el-form-item>
+                        <el-form-item label="新密碼">
+                            <el-input v-model="form.newPwd"></el-input>
+                        </el-form-item>
+                        <el-form-item label="確認新密碼">
+                            <el-input v-model="form.checkNewPwd"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="showDialog = false">取消</el-button>
+                        <el-button type="primary" @click="submitForm">確定</el-button>
+                    </span>
+                </el-dialog>
+            </div>
+        </template>
     </div>
 </body>
 <!-- import Vue before Element -->
@@ -94,6 +124,13 @@
             allUserCount: 0,
             todayUserCount: 0,
             weekUserCount: 0,
+            showDialog: false,
+            form: {
+                email: '',
+                oldPwd: '',
+                newPwd: '',
+                checkNewPwd: ''
+            }
         },
         created: function () {
             this.getTableData();
@@ -101,7 +138,7 @@
         },
         methods: {
             getTableData: function () {
-                var self = this;
+                let self = this;
                 $.ajax({
                     type: "GET",
                     url: "/user/all",
@@ -113,11 +150,8 @@
                     }
                 });
             },
-            changePassword(email) {
-                console.log(email);
-            },
-            getUserStatistic: function() {
-                var self = this;
+            getUserStatistic: function () {
+                let self = this;
                 $.ajax({
                     type: "GET",
                     url: "/user/all/statistic",
@@ -128,6 +162,37 @@
                     },
                     error: function (json) {
                         self.$message.error('獲取用戶統計數據失敗');
+                    }
+                });
+            },
+            changePassword(email) {
+                this.showDialog = true;
+                this.form.email = email;
+            },
+            submitForm() {
+
+                let self = this;
+
+                // 發送更新密碼的請求
+                $.ajax({
+                    type: "POST",
+                    url: "/user/password",
+                    data: JSON.stringify({
+                        email: self.form.email,
+                        oldPwd: self.form.oldPwd,
+                        newPwd: self.form.newPwd,
+                        checkNewPwd: self.form.checkNewPwd
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        self.$message({
+                            message: result.message,
+                            type: 'success'
+                        });
+                    },
+                    error: function (result) {
+                        self.$message.error(result.responseJSON.message);
                     }
                 });
             }
