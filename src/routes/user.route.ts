@@ -20,6 +20,7 @@ class UserRoute implements Routes {
         this.router.post(`${this.path}/name`, this.userController.updateUsername);
         this.router.get(`${this.path}/profile`, this.userController.getUserProfile);
         this.router.get(`${this.path}/:email/verified/:code`, this.userController.verifiedEmail);
+        this.router.get(`${this.path}/all`, this.userController.getAllUser);
     }
 }
 

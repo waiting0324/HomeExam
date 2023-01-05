@@ -52,6 +52,15 @@ class UserService {
         });
     }
 
+    /**
+     * 查詢所有帳號
+     * @returns 所有帳號
+     */
+    public async getAllUser(): Promise<User[]> {
+        const findUsers: User[] = await this.users.findAll();
+        return findUsers;
+    }
+
 }
 
 export default UserService;

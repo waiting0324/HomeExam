@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions/HttpException';
 import UserService from '../services/user.service';
-import { UserProfileDto } from '../dtos/user.dto';
+import { UserListDto, UserProfileDto } from '../dtos/user.dto';
 import AuthService from '../services/auth.service';
+import { User } from '../interfaces/users.interfaces'
+import DateUtil from '../utils/date';
 
 class UserController {
 
@@ -66,6 +68,28 @@ class UserController {
         } catch (error) {
             next(error);
         }
+    }
+
+    /**
+     * 獲取所有用戶
+     */
+    public getAllUser = async (req: Request, res: Response, next: NextFunction) => {
+
+        // 查詢所有用戶
+        const userList: User[] = await this.userService.getAllUser();
+
+        // 封裝用戶屬性轉成 DTO
+        const userDtoList: UserListDto[] = [];
+        for (let user of userList) {
+            const userDto: UserListDto = new UserListDto();
+            userDto.email = user.email;
+            userDto.name = user.name;
+            userDto.signUpTime = DateUtil.format(user.signUpTime);
+            userDto.loggedInTimes = user.loggedInTimes;
+            userDtoList.push(userDto);
+        }
+
+        res.status(200).json({ data: userDtoList });
     }
 
 }
