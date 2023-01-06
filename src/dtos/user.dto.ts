@@ -30,6 +30,7 @@ export class UserListDto {
   public signUpTime: string; // 註冊時間
   public loggedInTimes: number; // 登入次數
   public lastVisitedTime: string; // 上次訪問時間
+  public allowChangePassword: boolean; // 是否可以更改密碼(通過密碼方式註冊的帳號)
 }
 
 /**

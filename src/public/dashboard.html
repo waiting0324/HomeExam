@@ -75,7 +75,7 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="warning" @click="changePassword(scope.row.email)">更改密碼
+                                <el-button v-if="scope.row.allowChangePassword" size="mini" type="warning" @click="changePassword(scope.row.email)">更改密碼
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -92,13 +92,13 @@
                             <el-input v-model="form.email" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="原密碼">
-                            <el-input v-model="form.oldPwd"></el-input>
+                            <el-input type="password" v-model="form.oldPwd"></el-input>
                         </el-form-item>
                         <el-form-item label="新密碼">
-                            <el-input v-model="form.newPwd"></el-input>
+                            <el-input type="password" v-model="form.newPwd"></el-input>
                         </el-form-item>
                         <el-form-item label="確認新密碼">
-                            <el-input v-model="form.checkNewPwd"></el-input>
+                            <el-input type="password" v-model="form.checkNewPwd"></el-input>
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
@@ -168,6 +168,9 @@
             changePassword(email) {
                 this.showDialog = true;
                 this.form.email = email;
+                this.form.oldPwd = '';
+                this.form.newPwd = '';
+                this.form.checkNewPwd = '';
             },
             submitForm() {
 

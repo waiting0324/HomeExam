@@ -119,6 +119,7 @@ class UserController {
         userDto.signUpTime = DateUtil.format(user.signUpTime);
         userDto.loggedInTimes = user.loggedInTimes;
         userDto.lastVisitedTime = DateUtil.format(user.lastVisitedTime);
+        userDto.allowChangePassword = user.password != null;
         userDtoList.push(userDto);
       }
 
@@ -208,6 +209,9 @@ class UserController {
         throw new HttpException(403, '新密碼 與 確認密碼 不一致');
       }
       const findUserPwd = (await this.userService.getUser(email)).password;
+      if (findUserPwd == null) {
+        throw new HttpException(403, '非通過密碼方式註冊，不允許修改密碼');
+      }
       if (!bycrypt.compareSync(oldPwd, findUserPwd)) {
         throw new HttpException(403, '原密碼不正確');
       }
