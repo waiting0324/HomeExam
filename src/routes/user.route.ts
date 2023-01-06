@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import UserController from '../controllers/user.controller';
 import {Routes} from '../interfaces/routes.interfaces';
+import {requiresAuth} from 'express-openid-connect';
 
 /**
  * 用戶相關的路由
@@ -22,29 +23,43 @@ class UserRoute implements Routes {
    */
   private initRoutes() {
     // 更新用戶名稱
-    this.router.post(`${this.path}/name`, this.userController.updateUsername);
+    this.router.post(
+      `${this.path}/name`,
+      requiresAuth(),
+      this.userController.updateUsername,
+    );
     // 獲取當前登入用戶的數據
-    this.router.get(`${this.path}/profile`, this.userController.getUserProfile);
+    this.router.get(
+      `${this.path}/profile`,
+      this.userController.getUserProfile,
+    );
     // 驗證用戶信箱
     this.router.get(
       `${this.path}/:email/verified/:code`,
       this.userController.verifiedEmail,
     );
     // 獲取所有用戶
-    this.router.get(`${this.path}/all`, this.userController.getAllUser);
+    this.router.get(
+      `${this.path}/all`,
+      requiresAuth(),
+      this.userController.getAllUser,
+    );
     // 查詢用戶統計信息
     this.router.get(
       `${this.path}/all/statistic`,
+      requiresAuth(),
       this.userController.getAllUserStatistic,
     );
     // 發送驗證信件
     this.router.get(
       `${this.path}/:email/verified`,
+      requiresAuth(),
       this.userController.sendVerifiedEmail,
     );
     // 更新用戶密碼
     this.router.post(
       `${this.path}/password`,
+      requiresAuth(),
       this.userController.updatePassword,
     );
   }
