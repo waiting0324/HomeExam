@@ -22,6 +22,7 @@ class AuthRoute implements Routes {
    * 綁定 API 請求路徑 與 具體執行函數
    */
   private initRoutes() {
+    // 給 Auth0 回調用的，用來紀錄用戶登入數據
     this.router.get(
       `${this.path}${AUTH0_LOGIN_RECORD_ROUTE}`,
       this.authController.loginRecord,
