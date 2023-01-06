@@ -18,13 +18,17 @@ class AuthController {
     res: Response,
     next: NextFunction,
   ) => {
-    // 如果當前登入的用戶不為空，則進行紀錄
-    if (req.oidc.user != undefined) {
-      this.authService.loginRecord(req.oidc.user.email, req.oidc.user.name);
-    }
+    try {
+      // 如果當前登入的用戶不為空，則進行紀錄
+      if (req.oidc.user != undefined) {
+        this.authService.loginRecord(req.oidc.user.email, req.oidc.user.name);
+      }
 
-    // 讓瀏覽器 302 跳轉到首頁
-    res.redirect(302, '/');
+      // 讓瀏覽器 302 跳轉到首頁
+      res.redirect(302, '/');
+    } catch (error) {
+      next(error);
+    }
   };
 }
 

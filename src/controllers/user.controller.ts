@@ -106,22 +106,26 @@ class UserController {
     res: Response,
     next: NextFunction,
   ) => {
-    // 查詢所有用戶
-    const userList: User[] = await this.userService.getAllUser();
+    try {
+      // 查詢所有用戶
+      const userList: User[] = await this.userService.getAllUser();
 
-    // 封裝用戶屬性轉成 DTO
-    const userDtoList: UserListDto[] = [];
-    for (const user of userList) {
-      const userDto: UserListDto = new UserListDto();
-      userDto.email = user.email;
-      userDto.name = user.name;
-      userDto.signUpTime = DateUtil.format(user.signUpTime);
-      userDto.loggedInTimes = user.loggedInTimes;
-      userDto.lastVisitedTime = DateUtil.format(user.lastVisitedTime);
-      userDtoList.push(userDto);
+      // 封裝用戶屬性轉成 DTO
+      const userDtoList: UserListDto[] = [];
+      for (const user of userList) {
+        const userDto: UserListDto = new UserListDto();
+        userDto.email = user.email;
+        userDto.name = user.name;
+        userDto.signUpTime = DateUtil.format(user.signUpTime);
+        userDto.loggedInTimes = user.loggedInTimes;
+        userDto.lastVisitedTime = DateUtil.format(user.lastVisitedTime);
+        userDtoList.push(userDto);
+      }
+
+      res.status(200).json({data: userDtoList});
+    } catch (error) {
+      next(error);
     }
-
-    res.status(200).json({data: userDtoList});
   };
 
   /**
@@ -135,18 +139,22 @@ class UserController {
     res: Response,
     next: NextFunction,
   ) => {
-    // 查詢數據
-    const allUserCount: number = await this.userService.getAllUserCount();
-    const todayUserCount: number = await this.userService.getTodayUserCount();
-    const weekUserCount: number = await this.userService.getWeekUserCount();
+    try {
+      // 查詢數據
+      const allUserCount: number = await this.userService.getAllUserCount();
+      const todayUserCount: number = await this.userService.getTodayUserCount();
+      const weekUserCount: number = await this.userService.getWeekUserCount();
 
-    // 封裝數據
-    const userStatisticDto: UserStatisticDto = new UserStatisticDto();
-    userStatisticDto.allUserCount = allUserCount;
-    userStatisticDto.todayUserCount = todayUserCount;
-    userStatisticDto.weekUserCount = weekUserCount;
+      // 封裝數據
+      const userStatisticDto: UserStatisticDto = new UserStatisticDto();
+      userStatisticDto.allUserCount = allUserCount;
+      userStatisticDto.todayUserCount = todayUserCount;
+      userStatisticDto.weekUserCount = weekUserCount;
 
-    res.status(200).json({data: userStatisticDto});
+      res.status(200).json({data: userStatisticDto});
+    } catch (error) {
+      next(error);
+    }
   };
 
   /**
@@ -160,11 +168,15 @@ class UserController {
     res: Response,
     next: NextFunction,
   ) => {
-    if (req.oidc.user == undefined) {
-      throw new HttpException(403, '帳號未登入');
-    }
+    try {
+      if (req.oidc.user == undefined) {
+        throw new HttpException(403, '帳號未登入');
+      }
 
-    this.authService.sendVerifiedEmail(req.oidc.user.email);
+      this.authService.sendVerifiedEmail(req.oidc.user.email);
+    } catch (error) {
+      next(error);
+    }
   };
 
   /**
