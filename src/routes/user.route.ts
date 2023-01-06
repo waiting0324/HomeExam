@@ -22,16 +22,16 @@ class UserRoute implements Routes {
    * 綁定 API 請求路徑 與 具體執行函數
    */
   private initRoutes() {
+    // 獲取當前登入用戶的數據
+    this.router.get(
+      `${this.path}/profile`,
+      this.userController.getUserProfile,
+    );
     // 更新用戶名稱
     this.router.post(
       `${this.path}/name`,
       requiresAuth(),
       this.userController.updateUsername,
-    );
-    // 獲取當前登入用戶的數據
-    this.router.get(
-      `${this.path}/profile`,
-      this.userController.getUserProfile,
     );
     // 驗證用戶信箱
     this.router.get(
@@ -44,15 +44,15 @@ class UserRoute implements Routes {
       requiresAuth(),
       this.userController.getAllUser,
     );
-    // 查詢用戶統計信息
+    // 獲取所有用戶統計信息
     this.router.get(
       `${this.path}/all/statistic`,
       requiresAuth(),
       this.userController.getAllUserStatistic,
     );
     // 發送驗證信件
-    this.router.get(
-      `${this.path}/:email/verified`,
+    this.router.post(
+      `${this.path}/email/verified`,
       requiresAuth(),
       this.userController.sendVerifiedEmail,
     );

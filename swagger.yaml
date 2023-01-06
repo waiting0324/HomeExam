@@ -1,0 +1,211 @@
+tags:
+  - name: auth
+    description: 授權相關的 API
+  - name: user
+    description: 用戶相關的 API
+
+paths:
+  /login:
+    get:
+      tags:
+        - auth
+      summary: 登入 (由 Auth0 處理)
+      responses:
+        302:
+          description: '跳轉到 Auth0 頁面'
+  /login/callback:
+    get:
+      tags:
+        - auth
+      summary: 給 Auth0 登入成功後回調用的，用來紀錄用戶登入數據與發送驗證信
+      responses:
+        200:
+          description: '成功'
+  /logout:
+    get:
+      tags:
+        - auth
+      summary: 登出 (由 Auth0 處理)
+      responses:
+        302:
+          description: '跳轉到首頁'
+  /user/profile:
+    get:
+      tags:
+        - user
+      summary: 獲取當前登入用戶的數據
+      responses:
+        200:
+          description: '用戶數據'
+          schema:
+            $ref: '#/definitions/UserProfile'
+  /user/name:
+    post:
+      tags:
+        - user
+      summary: 更新用戶名稱
+      parameters:
+        - name: email
+          in: header
+          description: 用戶對應的 Email (通過對 Token 進行解析來獲取)
+          require: true
+          type: string
+        - name: name
+          in: body
+          description: 新的用戶名稱
+          require: true
+          type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+  /user/{email}/verified/{code}:
+    get:
+      tags:
+        - user
+      summary: 驗證用戶信箱
+      parameters:
+        - name: email
+          in: path
+          description: 用戶對應的 Email
+          require: true
+          type: string
+        - name: code
+          in: path
+          description: 信箱對應的驗證碼
+          require: true
+          type: string
+      responses:
+        302:
+          description: '跳轉到 Dashboard 頁面'
+        403:
+          description: '驗證碼不正確'
+  /user/all:
+    get:
+      tags:
+        - user
+      summary: 獲取所有註冊用戶
+      responses:
+        200:
+          description: '用戶數據集合'
+          schema:
+            type: array
+            $ref: '#/definitions/User'
+  /user/all/statistic:
+    get:
+      tags:
+        - user
+      summary: 獲取所有用戶統計信息
+      responses:
+        200:
+          description: '用戶統計數據'
+          schema:
+            $ref: '#/definitions/UserStatistic'
+  /user/email/verified:
+    post:
+      tags:
+        - user
+      summary: 發送驗證信件
+      parameters:
+        - name: email
+          in: header
+          description: 用戶對應的 Email (通過對 Token 進行解析來獲取)
+          require: true
+          type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+  /user/password:
+    post:
+      tags:
+        - user
+      summary: 更新用戶密碼
+      parameters:
+        - name: email
+          in: body
+          description: 用戶對應的 Email
+          require: true
+          type: string
+        - name: oldPwd
+          in: body
+          description: 老密碼
+          require: true
+          type: string
+        - name: newPwd
+          in: body
+          description: 新密碼
+          require: true
+          type: string
+        - name: checkNewPwd
+          in: body
+          description: 確認新密碼
+          require: true
+          type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        403:
+          description: 密碼校驗異常
+
+
+definitions:
+  SuccessResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        description: 消息內容
+  UserProfile:
+    type: object
+    description: 首頁用戶信息
+    properties:
+      isAuthenticated:
+        type: boolean
+        description: 是否已登入
+      isVerified:
+        type: boolean
+        description: 是否已驗證過信箱
+      email:
+        type: string
+        description: 用戶信箱
+      name:
+        type: string
+        description: 用戶名稱
+      pic:
+        type: string
+        description: 用戶相片地址
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+        description: 用戶信箱
+      name:
+        type: string
+        description: 用戶姓名
+      signUpTime:
+        type: string
+        description: 註冊時間
+      loggedInTimes:
+        type: integer
+        description: 登入次數
+      lastVisitedTime:
+        type: string
+        description: 最後訪問時間
+      allowChangePassword:
+        type: boolean
+        description: 是否可以更改密碼(通過密碼方式註冊的帳號)
+  UserStatistic:
+    type: object
+    properties:
+      allUserCount:
+        type: integer
+        description: 所有註冊用戶數量
+      todayUserCount:
+        type: integer
+        description: 今天訪問的用戶數量
+      weekUserCount:
+        type: integer
+        description: 7天內訪問的用戶數量

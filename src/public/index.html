@@ -124,11 +124,15 @@
             },
             // 發送驗證信件
             resentEmail() {
+                let self = this;
                 $.ajax({
                     type: "POST",
-                    url: "/user/name",
+                    url: "/user/email/verified",
                     success: function (data) {
-                        location.reload();
+                        self.$message({
+                            message: result.message,
+                            type: 'success'
+                        });
                     }
                 });
             }

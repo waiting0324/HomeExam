@@ -64,6 +64,9 @@ class UserController {
       // 從 Token 與 請求參數 獲取數據
       const email = req.oidc.user.email;
       const name = req.body.name;
+      if (name == null) {
+        throw new HttpException(403, '未指定用戶名稱');
+      }
 
       // 更新 用戶名稱
       this.userService.updateUsername(email, name);
@@ -174,7 +177,9 @@ class UserController {
         throw new HttpException(403, '帳號未登入');
       }
 
-      this.authService.sendVerifiedEmail(req.oidc.user.email);
+      await this.authService.sendVerifiedEmail(req.oidc.user.email);
+
+      res.status(200).json({message: '驗證信發送成功'});
     } catch (error) {
       next(error);
     }

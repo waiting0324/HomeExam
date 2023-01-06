@@ -12,21 +12,24 @@ class AuthService {
   private users = DB.Users;
 
   /**
-   * 在用戶登入時，紀錄登入的相關信息
+   * 在用戶登入時，紀錄登入的相關信息，且如果用戶信箱未驗證，會發送驗證信件
    * @param {string} email 登入用戶信箱
    * @param {string} name 登入用戶名稱
    */
   public async loginRecord(email: string, name: string): Promise<void> {
-    // 當 Email 已存在，則表示該用戶之前已經註冊過，則只更新登入次數
+    // 查詢 Email 對應的用戶
     const findUser: User | null = await this.users.findOne({
       where: {email: email},
     });
+
+    // 對應用戶已存在
     if (findUser != null) {
       // 如果用戶郵箱尚未驗證，則發送驗證郵件
       if (!findUser.isVerified) {
         await this.sendVerifiedEmail(findUser.email);
       }
 
+      // 更新登入次數
       await this.users.update(
         {...findUser, loggedInTimes: findUser.loggedInTimes + 1},
         {where: {id: findUser.id}},
@@ -34,7 +37,7 @@ class AuthService {
       return;
     }
 
-    // 當 Email 不存在，表示是通過 Google 或 Facebook 授權的用戶
+    // 當  Email 對應用戶 不存在，表示是通過 Google 或 Facebook 授權的用戶
     // 註: 通過 帳號、密碼 創建的帳號，會由 Auth0 那邊執行腳本寫入到 MySQL 中
     const createUser: CreateUserDto = new CreateUserDto();
     createUser.email = email;

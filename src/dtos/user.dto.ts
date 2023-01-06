@@ -34,7 +34,7 @@ export class UserListDto {
 }
 
 /**
- * 用戶統計信息
+ * 所有用戶統計信息
  */
 export class UserStatisticDto {
   public allUserCount: number; // 所有註冊用戶數量

@@ -11,6 +11,8 @@ import errorMiddleware from './middlewares/error.middleware';
 import visitedTimeMiddleware from './middlewares/visit.middleware';
 import dotenv from 'dotenv';
 import {auth} from 'express-openid-connect';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 /**
  * 應用基礎配置類
@@ -33,6 +35,7 @@ class App {
     this.initMiddlewares();
     this.initRoutes(routes);
     this.initErrorMiddleware();
+    this.initSwagger();
   }
 
   /**
@@ -88,6 +91,25 @@ class App {
       },
     };
     this.app.use(auth(config));
+  }
+
+  /**
+   * 初始化 Swagger 文檔服務
+   */
+  private initSwagger() {
+    const options = {
+      swaggerDefinition: {
+        info: {
+          title: 'REST API',
+          version: '1.0.0',
+          description: 'Example docs',
+        },
+      },
+      apis: ['swagger.yaml'],
+    };
+
+    const specs = swaggerJSDoc(options);
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
   }
 }
 
