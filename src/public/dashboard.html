@@ -19,7 +19,6 @@
         text-align: center;
         color: #333;
         margin-top: 80px;
-        margin-bottom: 80px;
         padding: 15px;
     }
 
@@ -35,6 +34,14 @@
     .el-dialog__body {
         padding-right: 80px;
     }
+
+    .my-button {
+        width: 67%;
+        height: 40px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
 </style>
 
 <body>
@@ -44,7 +51,13 @@
                 <div class="grid-content bg-purple">Aha Home Exam</div>
             </el-col>
         </el-row>
-
+        <el-row>
+            <el-col :span="3" :offset="16">
+                <el-button type="primary my-button" @click="returnIndex">
+                    返回首頁
+                </el-button>
+            </el-col>
+        </el-row>
         <el-row style="margin-bottom: 50px;">
             <el-col :offset="6" :span="4">
                 <el-statistic title="註冊人數" :value="allUserCount">
@@ -198,6 +211,9 @@
                         self.$message.error(result.responseJSON.message);
                     }
                 });
+            },
+            returnIndex() {
+                location.href = '/';
             }
         }
     })

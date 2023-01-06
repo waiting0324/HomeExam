@@ -69,12 +69,16 @@
                 </div>
             </el-col>
         </el-row>
-        <el-row>
-            <el-col :span="3" :offset="8">
-                <el-button id="login_button" type="primary my-button" onclick="window.location.href='/login'">登入 / 註冊
+        <el-row id="login_button" style="margin-top: 120px">
+            <el-col :span="3" :offset="11">
+                <el-button type="primary my-button" onclick="window.location.href='/login'">登入 / 註冊
                 </el-button>
-                <el-button id="logout_button" type="danger my-button" onclick="window.location.href='/logout'"
-                    style="display: none">登出</el-button>
+            </el-col>
+        </el-row>
+        <el-row id="logout_button">
+            <el-col :span="3" :offset="8">
+                <el-button type="danger my-button" onclick="window.location.href='/logout'">登出
+                </el-button>
             </el-col>
             <el-col :span="3" :offset="2">
                 <el-button type="primary my-button" @click="updateUsername">修改用戶名稱</el-button>
@@ -157,7 +161,7 @@
                     document.getElementById('user-email').innerHTML = result.data.email;
 
                     // 如果信箱已經驗證過，則顯示用戶儀表盤按鈕，否則則顯示驗證信箱按鈕
-                    if(result.data.isVerified) {
+                    if (result.data.isVerified) {
                         document.getElementById('dashboard-btn').style.display = 'block';
                     } else {
                         document.getElementById('resent-email-btn').style.display = 'block';
