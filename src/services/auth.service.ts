@@ -65,10 +65,13 @@ class AuthService {
     // 信件相關數據
     const mailFrom: string = MAIL_FROM;
     const mailSubtitle: string = MAIL_SUBTITLE;
-    const mailContent: string = MAIL_TEMPLATE.replaceAll(
+    const mailContent: string = MAIL_TEMPLATE.replace(
       '{CODE}',
       findUser.verifiedCode,
-    ).replaceAll('{EMAIL}', encodeURIComponent(email));
+    )
+      .replace('{CODE}', findUser.verifiedCode)
+      .replace('{EMAIL}', encodeURIComponent(email))
+      .replace('{EMAIL}', encodeURIComponent(email));
 
     // 發送驗證信件
     MailUtil.sendMail({

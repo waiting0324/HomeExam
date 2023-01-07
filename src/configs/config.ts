@@ -9,7 +9,7 @@ const DB_PASSWORD: string = '*****';
 const DB_DATABASE: string = 'aha';
 
 // --- Auth0相關的配置 ---
-const AUTH0_BASEURL: string = 'http://localhost';
+const AUTH0_BASEURL: string = 'http://34.81.210.212';
 const AUTH0_LOGIN_CALLBACK_ROUTE: string = '/login/callback';
 const AUTH0_LOGIN_RECORD_ROUTE: string = '/login/record';
 

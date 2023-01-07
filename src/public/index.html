@@ -142,7 +142,7 @@
                 $.ajax({
                     type: "POST",
                     url: "/user/email/verification",
-                    success: function (data) {
+                    success: function (result) {
                         self.$message({
                             message: result.message,
                             type: 'success'
