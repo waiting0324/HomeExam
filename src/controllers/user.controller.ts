@@ -70,7 +70,7 @@ class UserController {
 
       // 更新 用戶名稱
       this.userService.updateUsername(email, name);
-      res.status(200).json({message: '請求成功'});
+      res.status(200).json({message: '更新用戶名稱成功'});
     } catch (error) {
       next(error);
     }

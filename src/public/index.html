@@ -42,11 +42,13 @@
 
 <body>
     <div id="app">
+        <!-- 標題 -->
         <el-row>
             <el-col :span="12" :offset="6">
                 <div class="grid-content bg-purple">Aha Home Exam</div>
             </el-col>
         </el-row>
+        <!-- 右上按鈕 -->
         <el-row>
             <el-col :span="3" :offset="15">
                 <el-button id="dashboard-btn" type="primary my-button" @click="dashboard" style="display: none">
@@ -57,6 +59,7 @@
                 </el-button>
             </el-col>
         </el-row>
+        <!-- 用戶信息 -->
         <el-row id="user-profile">
             <el-col :span="2" :offset="11" class="user-profile-pic">
                 <div class="demo-basic--circle">
@@ -69,6 +72,7 @@
                 </div>
             </el-col>
         </el-row>
+        <!-- 下方按鈕 -->
         <el-row id="login_button" style="margin-top: 120px">
             <el-col :span="3" :offset="11">
                 <el-button type="primary my-button" onclick="window.location.href='/login'">登入 / 註冊
@@ -98,25 +102,34 @@
 
             // 更新用戶名稱
             updateUsername() {
+
+                // 彈出提示框
                 this.$prompt('請輸入用戶名稱', {
                     confirmButtonText: '確定',
                     cancelButtonText: '取消',
-                }).then(({ value }) => {
-
+                })
                     // 發送更新用戶名稱的請求
-                    $.ajax({
-                        type: "POST",
-                        url: "/user/name",
-                        data: JSON.stringify({
-                            name: value,
-                        }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (data) {
-                            location.reload();
-                        }
+                    .then(({ value }) => {
+                        let self = this;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/user/name",
+                            data: JSON.stringify({
+                                name: value,
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                // 刷新頁面
+                                location.reload();
+                            },
+                            error: function (result) {
+                                self.$message.error(result.responseJSON.message);
+                            }
+                        });
+                    }).catch(() => {
                     });
-                }).catch(() => { });
             },
             // 查看用戶儀表盤
             dashboard() {
@@ -127,7 +140,7 @@
                 let self = this;
                 $.ajax({
                     type: "POST",
-                    url: "/user/email/verified",
+                    url: "/user/email/verification",
                     success: function (data) {
                         self.$message({
                             message: result.message,
@@ -154,12 +167,15 @@
                 let logoutBtn = document.getElementById('logout_button');
                 let userProfile = document.getElementById('user-profile');
 
-                // 如果為登入狀態，則顯示登出按鈕，隱藏登入按鈕
+                // 如果為登入狀態
                 if (result.data.isAuthenticated) {
+
+                    // 顯示登出按鈕，隱藏登入按鈕
                     loginBtn.style.display = 'none';
                     logoutBtn.style.display = 'block';
-                    userProfile.style.display = 'block';
 
+                    // 填充用戶數據
+                    userProfile.style.display = 'block';
                     document.getElementById('user-pic').children[0].src = result.data.pic;
                     document.getElementById('user-name').innerHTML = result.data.name;
                     document.getElementById('user-email').innerHTML = result.data.email;
@@ -171,8 +187,9 @@
                         document.getElementById('resent-email-btn').style.display = 'block';
                     }
                 }
-                // 否則則顯示登入按鈕，隱藏登出按鈕
+                // 非登入狀態
                 else {
+                    // 顯示登入按鈕，隱藏登出按鈕
                     userProfile.style.display = 'none';
                     loginBtn.style.display = 'block';
                     logoutBtn.style.display = 'none';

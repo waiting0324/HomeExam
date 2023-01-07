@@ -46,11 +46,13 @@
 
 <body>
     <div id="app">
+        <!-- 標題 -->
         <el-row>
             <el-col :span="12" :offset="6">
                 <div class="grid-content bg-purple">Aha Home Exam</div>
             </el-col>
         </el-row>
+        <!-- 右上按鈕 -->
         <el-row>
             <el-col :span="3" :offset="16">
                 <el-button type="primary my-button" @click="returnIndex">
@@ -58,6 +60,7 @@
                 </el-button>
             </el-col>
         </el-row>
+        <!-- 用戶統計數據 -->
         <el-row style="margin-bottom: 50px;">
             <el-col :offset="6" :span="4">
                 <el-statistic title="註冊人數" :value="allUserCount">
@@ -72,6 +75,7 @@
                 </el-statistic>
             </el-col>
         </el-row>
+        <!-- 用戶列表 -->
         <el-row>
             <el-col :span="12" :offset="6">
                 <template>
@@ -88,7 +92,8 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button v-if="scope.row.allowChangePassword" size="mini" type="warning" @click="changePassword(scope.row.email)">更改密碼
+                                <el-button v-if="scope.row.allowChangePassword" size="mini" type="warning"
+                                    @click="changePassword(scope.row.email)">更改密碼
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -97,6 +102,7 @@
             </el-col>
         </el-row>
 
+        <!-- 修改密碼彈窗 -->
         <template>
             <div>
                 <el-dialog title="修改密碼" :visible.sync="showDialog" width="30%">
@@ -150,6 +156,7 @@
             this.getUserStatistic();
         },
         methods: {
+            // 獲取用戶列表
             getTableData: function () {
                 let self = this;
                 $.ajax({
@@ -163,6 +170,7 @@
                     }
                 });
             },
+            // 獲取用戶統計數據
             getUserStatistic: function () {
                 let self = this;
                 $.ajax({
@@ -178,6 +186,7 @@
                     }
                 });
             },
+            // 設置更改密碼彈窗內容
             changePassword(email) {
                 this.showDialog = true;
                 this.form.email = email;
@@ -185,11 +194,9 @@
                 this.form.newPwd = '';
                 this.form.checkNewPwd = '';
             },
+            // 發送更新密碼的請求
             submitForm() {
-
                 let self = this;
-
-                // 發送更新密碼的請求
                 $.ajax({
                     type: "POST",
                     url: "/user/password",
@@ -212,6 +219,7 @@
                     }
                 });
             },
+            // 返回首頁
             returnIndex() {
                 location.href = '/';
             }

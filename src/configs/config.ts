@@ -24,8 +24,8 @@ const MAIL_FROM: string = 'weicardstw@gmail.com';
 const MAIL_SUBTITLE: string = 'Aha Exam Verified Mail';
 const MAIL_TEMPLATE: string =
   `請點擊此連結進行信箱驗證 : <a target="_blank" ` +
-  `href="${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verified/{CODE}">` +
-  `${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verified/{CODE}</a>`;
+  `href="${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verification/{CODE}">` +
+  `${AUTH0_BASEURL}:${PORT}/user/{EMAIL}/verification/{CODE}</a>`;
 
 export {
   PORT,

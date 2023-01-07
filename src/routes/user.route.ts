@@ -23,19 +23,22 @@ class UserRoute implements Routes {
    */
   private initRoutes() {
     // 獲取當前登入用戶的數據
-    this.router.get(
-      `${this.path}/profile`,
-      this.userController.getUserProfile,
-    );
+    this.router.get(`${this.path}/profile`, this.userController.getUserProfile);
     // 更新用戶名稱
     this.router.post(
       `${this.path}/name`,
       requiresAuth(),
       this.userController.updateUsername,
     );
+    // 發送驗證信件
+    this.router.post(
+      `${this.path}/email/verification`,
+      requiresAuth(),
+      this.userController.sendVerifiedEmail,
+    );
     // 驗證用戶信箱
     this.router.get(
-      `${this.path}/:email/verified/:code`,
+      `${this.path}/:email/verification/:code`,
       this.userController.verifiedEmail,
     );
     // 獲取所有用戶
@@ -49,12 +52,6 @@ class UserRoute implements Routes {
       `${this.path}/all/statistic`,
       requiresAuth(),
       this.userController.getAllUserStatistic,
-    );
-    // 發送驗證信件
-    this.router.post(
-      `${this.path}/email/verified`,
-      requiresAuth(),
-      this.userController.sendVerifiedEmail,
     );
     // 更新用戶密碼
     this.router.post(

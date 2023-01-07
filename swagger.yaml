@@ -1,6 +1,6 @@
 tags:
   - name: auth
-    description: 授權相關的 API
+    description: 權限相關的 API
   - name: user
     description: 用戶相關的 API
 
@@ -59,7 +59,22 @@ paths:
         200:
           schema:
             $ref: '#/definitions/SuccessResponse'
-  /user/{email}/verified/{code}:
+  /user/email/verification:
+    post:
+      tags:
+        - user
+      summary: 發送驗證信件
+      parameters:
+        - name: email
+          in: header
+          description: 用戶對應的 Email (通過對 Token 進行解析來獲取)
+          require: true
+          type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+  /user/{email}/verification/{code}:
     get:
       tags:
         - user
@@ -101,21 +116,6 @@ paths:
           description: '用戶統計數據'
           schema:
             $ref: '#/definitions/UserStatistic'
-  /user/email/verified:
-    post:
-      tags:
-        - user
-      summary: 發送驗證信件
-      parameters:
-        - name: email
-          in: header
-          description: 用戶對應的 Email (通過對 Token 進行解析來獲取)
-          require: true
-          type: string
-      responses:
-        200:
-          schema:
-            $ref: '#/definitions/SuccessResponse'
   /user/password:
     post:
       tags:
@@ -148,7 +148,6 @@ paths:
             $ref: '#/definitions/SuccessResponse'
         403:
           description: 密碼校驗異常
-
 
 definitions:
   SuccessResponse:
